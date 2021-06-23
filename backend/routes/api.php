@@ -12,3 +12,7 @@ Route::get('company','App\Http\Controllers\CompanyController@index');
 Route::post('company','App\Http\Controllers\CompanyController@create');
 Route::put('/company/{id}','App\Http\Controllers\CompanyController@update');
 Route::delete('/company/{id}','App\Http\Controllers\CompanyController@delete');
+
+Route::get('/favourite/{id}','App\Http\Controllers\UsersController@myFavouriteCompany');
+Route::post('favourite','App\Http\Controllers\UsersController@addFavourite');
+Route::delete('/favourite/{id}','App\Http\Controllers\UsersController@deleteFavourite');
