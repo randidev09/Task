@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\Company;
 use App\Models\FavouriteCompany;
@@ -17,6 +17,29 @@ class UsersController extends Controller
     }
 
     public function create(request $request){
+        $rules = [
+            'username'              => 'required',
+            'email'                 => 'required|email|unique:user,email',
+            'phone'                 => 'required',
+            'password'              => 'required'
+        ];
+  
+        $messages = [
+            'username.required'     => 'Username cant be blank',
+            'email.required'        => 'Email cant be blank',
+            'email.email'           => 'Email does not valid',
+            'email.unique'          => 'Email already registered',
+            'password.required'     => 'Password cant be blank'
+        ];
+  
+        $validator = Validator::make($request->all(), $rules, $messages);
+        if($validator->fails()){
+            return response()->json([
+                'code' => '300',
+                'message' => 'Failed to create user'
+            ])->withErrors($validator);
+        }
+
         $user           = new User;
         $user->username = $request->username;
         $user->email    = $request->email;
@@ -56,24 +79,6 @@ class UsersController extends Controller
             'code' => '200',
             'message' => 'Successfully delete user'
         ]);
-    }
-
-    public function login(request $request){
-        $username   = $request->username;
-        $password   = $request->password;
-        $user       = User::where('username',$username)->first();
-        if( ! empty($user) && Hash::check( $password, $user->password ) ){
-            return response()->json([
-                'code' => '200',
-                'message' => 'Successfully login',
-                'userID' => $user->id
-            ]);   
-        }else{
-            return response()->json([
-                'code' => '404',
-                'message' => 'User not found'
-            ]);   
-        }
     }
 
     public function myFavouriteCompany($id){
