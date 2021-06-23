@@ -10,6 +10,7 @@ export default new Vuex.Store({
         is_login: false,
         user_id: null,
         user_name: null,
+        user_token: null
     },
     getters: {
       
@@ -19,6 +20,7 @@ export default new Vuex.Store({
             state.is_login = true
             state.user_id = user.user_id
             state.user_name = user.user_name
+            state.user_token = user.token
         },  
         logout(state){
             state.is_login = false

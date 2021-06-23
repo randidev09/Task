@@ -7,8 +7,8 @@ use App\Models\Company;
 
 class CompanyController extends Controller
 {
-    public function index(){
-        return Company::all();
+    public function index(request $request){
+        return Company::selectCompany($request);
     }
 
     public function create(request $request){

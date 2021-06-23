@@ -56,7 +56,7 @@ export default {
         }else{
           alert('please fill all the column')
         }
-      }).catch( alert('please fill all the column'));
+      });
     }
   }
 }

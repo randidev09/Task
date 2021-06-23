@@ -8,18 +8,32 @@
         <router-link to="/register">Register</router-link>
       </li>
       <li v-if="this.$store.state.is_login">
-        <a href="/" v-on:click="logout">Logout</a>
+        <router-link to="/company">List Company</router-link>
+      </li>
+      <li v-if="this.$store.state.is_login">
+        <router-link to="/favcompany">List Favourite Company</router-link>
+      </li>
+      <li v-if="this.$store.state.is_login">
+        <a v-on:click="logout">Logout</a>
       </li>
     </ul>
   </div>
 </template>
 
 <script>
+import axios from 'axios';
 export default {
   name: 'Navbar',
   methods: {
     logout: function(){
-      this.$store.commit('logout')
+      axios
+        .get('http://localhost/api/logout')
+        .then(response => {
+          if(response.data.code == 200){
+            this.$store.commit('logout')
+            this.$router.push('/login');
+          }
+        })
     }
   }
 }

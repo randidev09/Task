@@ -39,11 +39,12 @@ export default {
         let response_code = response.data.code
         const thisUser = {
           user_id: response.data.user.id,
-          user_name: response.data.user.username
+          user_name: response.data.user.username,
+          token: response.data.user.token_auth
         }
         if(response_code == 200){
           this.$store.commit('loginUpdate',thisUser)
-          this.$router.push('/');
+          this.$router.push('/company');
         }else{
           alert('Username / password is wrong.')
         }
