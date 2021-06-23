@@ -40,7 +40,7 @@ class AuthController extends Controller
             return response()->json([
                 'code' => '200',
                 'message' => 'Successfully login',
-                'userID' => $user->id
+                'user' => $user
             ]);   
         }else{
             return response()->json([
