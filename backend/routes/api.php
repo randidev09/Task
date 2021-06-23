@@ -5,10 +5,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('login','App\Http\Controllers\AuthController@login');
 Route::get('logout','App\Http\Controllers\AuthController@logout');
+Route::post('user','App\Http\Controllers\UsersController@create');
+Route::get('user','App\Http\Controllers\UsersController@index');
 
 Route::middleware(['is_login'])->group(function () {
-    Route::get('user','App\Http\Controllers\UsersController@index');
-    Route::post('user','App\Http\Controllers\UsersController@create');
     Route::put('/user/{id}','App\Http\Controllers\UsersController@update');
     Route::delete('/user/{id}','App\Http\Controllers\UsersController@delete');
 

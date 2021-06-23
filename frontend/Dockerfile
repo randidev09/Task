@@ -12,6 +12,11 @@ COPY package.json /app/package.json
 RUN npm install
 RUN npm install @vue/cli@3.7.0 -g
 RUN npm install axios
+RUN npm install vuex --save
+RUN npm install vue-router --save
+RUN npm install vue bootstrap bootstrap-vue --save
+RUN npm install js-cookie --save
+RUN npm install vuex-persistedstate --save 
 
 # start app
 CMD ["npm", "run", "serve"]

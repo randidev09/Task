@@ -1,15 +1,27 @@
 <template>
-  <div class="navbar">
+  <div class="navbar mb-5">
     <ul>
-        <li>Login</li>
-        <li>Register</li>
+      <li v-if="!this.$store.state.is_login">
+        <router-link to="/login">Login</router-link>
+      </li>
+      <li v-if="!this.$store.state.is_login">
+        <router-link to="/register">Register</router-link>
+      </li>
+      <li v-if="this.$store.state.is_login">
+        <a href="/" v-on:click="logout">Logout</a>
+      </li>
     </ul>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'Navbar'
+  name: 'Navbar',
+  methods: {
+    logout: function(){
+      this.$store.commit('logout')
+    }
+  }
 }
 </script>
 
@@ -21,12 +33,20 @@ h3 {
 ul {
   list-style-type: none;
   padding: 0;
+  margin-bottom: 0px;
+  margin-left: auto;
+  margin-right:1em;
 }
 li {
   display: inline-block;
   margin: 0 10px;
 }
 a {
-  color: #42b983;
+  color: #4e4d4d;
+  text-decoration: none;
+}
+.navbar{
+  background-color: #efefef;
+  box-shadow: 0px 0px 4px 1px #ccc;
 }
 </style>
