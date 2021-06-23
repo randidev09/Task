@@ -3,6 +3,9 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+Route::post('login','App\Http\Controllers\UsersController@login');
+Route::post('logout','App\Http\Controllers\UsersController@logout');
+
 Route::get('user','App\Http\Controllers\UsersController@index');
 Route::post('user','App\Http\Controllers\UsersController@create');
 Route::put('/user/{id}','App\Http\Controllers\UsersController@update');

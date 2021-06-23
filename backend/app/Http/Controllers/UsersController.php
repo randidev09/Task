@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 use App\Models\User;
 use App\Models\Company;
 use App\Models\FavouriteCompany;
@@ -57,13 +58,26 @@ class UsersController extends Controller
         ]);
     }
 
+    public function login(request $request){
+        $username   = $request->username;
+        $password   = $request->password;
+        $user       = User::where('username',$username)->first();
+        if( ! empty($user) && Hash::check( $password, $user->password ) ){
+            return response()->json([
+                'code' => '200',
+                'message' => 'Successfully login',
+                'userID' => $user->id
+            ]);   
+        }else{
+            return response()->json([
+                'code' => '404',
+                'message' => 'User not found'
+            ]);   
+        }
+    }
+
     public function myFavouriteCompany($id){
-        $companies = DB::table('company as c')
-                    ->join('favouriteCompany as f', 'f.companyID', '=', 'c.id')
-                    ->join('user as u', 'u.id', '=', 'f.userID')
-                    ->select('c.*')
-                    ->where('u.id','=',$id)
-                    ->get();
+        $companies = Company::getFavouriteCompany($id);
 
         return response()->json([
             'code' => '200',
@@ -89,13 +103,7 @@ class UsersController extends Controller
     public function deleteFavourite(request $request){
         $userID     = $request->userid;
         $companyID  = $request->companyid;
-        $companies = DB::table('company as c')
-                    ->join('favouriteCompany as f', 'f.companyID', '=', 'c.id')
-                    ->join('user as u', 'u.id', '=', 'f.userID')
-                    ->select('c.*')
-                    ->where('u.id','=',$userID)
-                    ->where('c.id','=',$companyID)
-                    ->delete();
+        $companies  = Company::deleteFavourite($userID,$companyID);
 
         return response()->json([
             'code' => '200',
