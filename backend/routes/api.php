@@ -19,5 +19,5 @@ Route::middleware(['is_login'])->group(function () {
 
     Route::get('/favourite/{id}','App\Http\Controllers\UsersController@myFavouriteCompany');
     Route::post('favourite','App\Http\Controllers\UsersController@addFavourite');
-    Route::delete('/favourite/{id}','App\Http\Controllers\UsersController@deleteFavourite');
+    Route::delete('/favourite','App\Http\Controllers\UsersController@deleteFavourite');
 });

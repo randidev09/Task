@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use Validator;
 use App\Models\User;
 use App\Models\Company;
@@ -41,11 +42,13 @@ class UsersController extends Controller
             ])->withErrors($validator);
         }
 
-        $user           = new User;
-        $user->username = $request->username;
-        $user->email    = $request->email;
-        $user->phone    = $request->phone;
-        $user->password = Hash::make($request->password);
+        $user                       = new User;
+        $user->username             = $request->username;
+        $user->email                = $request->email;
+        $user->phone                = $request->phone;
+        $user->password             = Hash::make($request->password);
+        $user->token_auth           = Str::random(64);
+        $user->verification_code    = Str::random(12);
         $user->save();
 
         return response()->json([
@@ -94,16 +97,23 @@ class UsersController extends Controller
     public function addFavourite(request $request){
         $userID     = $request->userid;
         $companyID  = $request->companyid;
-        
-        $favourite              = new FavouriteCompany();
-        $favourite->userID      = $userID;
-        $favourite->companyID   = $companyID;
-        $favourite->save();
 
-        return response()->json([
-            'code' => '200',
-            'message' => 'Successfully added to favourite'
-        ]);
+        if(FavouriteCompany::where('userId',$userID)->where('companyID',$companyID)->exists()){
+            return response()->json([
+                'code' => '200',
+                'message' => 'Already added to favourite'
+            ]);
+        }else{
+            $favourite              = new FavouriteCompany();
+            $favourite->userID      = $userID;
+            $favourite->companyID   = $companyID;
+            $favourite->save();
+
+            return response()->json([
+                'code' => '200',
+                'message' => 'Successfully added to favourite'
+            ]);
+        }
     }
 
     public function deleteFavourite(request $request){
