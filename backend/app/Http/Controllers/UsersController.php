@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\Company;
 use App\Models\FavouriteCompany;
@@ -16,6 +17,29 @@ class UsersController extends Controller
     }
 
     public function create(request $request){
+        $rules = [
+            'username'              => 'required',
+            'email'                 => 'required|email|unique:user,email',
+            'phone'                 => 'required',
+            'password'              => 'required'
+        ];
+  
+        $messages = [
+            'username.required'     => 'Username cant be blank',
+            'email.required'        => 'Email cant be blank',
+            'email.email'           => 'Email does not valid',
+            'email.unique'          => 'Email already registered',
+            'password.required'     => 'Password cant be blank'
+        ];
+  
+        $validator = Validator::make($request->all(), $rules, $messages);
+        if($validator->fails()){
+            return response()->json([
+                'code' => '300',
+                'message' => 'Failed to create user'
+            ])->withErrors($validator);
+        }
+
         $user           = new User;
         $user->username = $request->username;
         $user->email    = $request->email;
@@ -58,12 +82,7 @@ class UsersController extends Controller
     }
 
     public function myFavouriteCompany($id){
-        $companies = DB::table('company as c')
-                    ->join('favouriteCompany as f', 'f.companyID', '=', 'c.id')
-                    ->join('user as u', 'u.id', '=', 'f.userID')
-                    ->select('c.*')
-                    ->where('u.id','=',$id)
-                    ->get();
+        $companies = Company::getFavouriteCompany($id);
 
         return response()->json([
             'code' => '200',
@@ -89,13 +108,7 @@ class UsersController extends Controller
     public function deleteFavourite(request $request){
         $userID     = $request->userid;
         $companyID  = $request->companyid;
-        $companies = DB::table('company as c')
-                    ->join('favouriteCompany as f', 'f.companyID', '=', 'c.id')
-                    ->join('user as u', 'u.id', '=', 'f.userID')
-                    ->select('c.*')
-                    ->where('u.id','=',$userID)
-                    ->where('c.id','=',$companyID)
-                    ->delete();
+        $companies  = Company::deleteFavourite($userID,$companyID);
 
         return response()->json([
             'code' => '200',
