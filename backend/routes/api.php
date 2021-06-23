@@ -20,5 +20,5 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('user','App\Http\Controllers\UsersController@index');
 Route::post('user','App\Http\Controllers\UsersController@create');
-Route::put('user','App\Http\Controllers\UsersController@update');
-Route::delete('user','App\Http\Controllers\UsersController@delete');
+Route::put('/user/{id}','App\Http\Controllers\UsersController@update');
+Route::delete('/user/{id}','App\Http\Controllers\UsersController@delete');

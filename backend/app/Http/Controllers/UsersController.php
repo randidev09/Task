@@ -20,24 +20,37 @@ class UsersController extends Controller
         $user->password = Hash::make($request->password);
         $user->save();
 
-        return 'berhasil save';
+        return response()->json([
+            'code' => '200',
+            'message' => 'Successfully create user'
+        ]);
     }
 
     public function update(request $request, $id){
+        $username = $request->username;
+        $email    = $request->email;
+        $phone    = $request->phone;
+
         $user           = User::find($id);
-        $user->username = $request->username;
-        $user->email    = $request->email;
-        $user->phone    = $request->phone;
-        $user->password = Hash::make($request->password);
+        $user->username = $username;
+        $user->email    = $email;
+        $user->phone    = $phone;
         $user->save();
 
-        return 'berhasil update';
+        return response()->json([
+            'code' => '200',
+            'message' => 'Successfully update user',
+            'user' => $user
+        ]);
     }
 
     public function delete($id){
         $user = User::find($id);
         $user->delete();
 
-        return 'berhasil hapus';
+        return response()->json([
+            'code' => '200',
+            'message' => 'Successfully delete user'
+        ]);
     }
 }
