@@ -1,6 +1,6 @@
 # Task
 
-This project is for interview assignment
+This is personal project
 
 ## Installation
 
