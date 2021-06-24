@@ -32,7 +32,7 @@ make setup
 
 this command will open a new terminal & run the project, its may take some times.<br>
 The frontend app will be run it on :
-```http://172.17.0.2:8080/```<br>
+```http://localhost:8080/```<br>
 and the backend app will be run it on :
 ```http://localhost/```<br>if you can't access the frontend app, you can see the url on the new terminal that opened earlier.
 
