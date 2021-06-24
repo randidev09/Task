@@ -1,8 +1,8 @@
 <template>
   <div id="login">
     <Navbar />
-    <div class="col-sm-6">
-        <ul>
+    <div class="col-sm-12">
+        <ul v-if="listCompany.length > 0">
             <li v-for="(c,c_key) in listCompany" :key="c_key">
                 {{ (c_key+1) +'. '+c.comp_name }}
                 -
@@ -11,6 +11,7 @@
                 </span>
             </li>
         </ul>
+        <div v-else>No favourite company found.</div>
     </div>
   </div>
 </template>

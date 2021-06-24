@@ -85,7 +85,7 @@ export default {
                     keyword: this.keyword
                 }
             })
-            .then(response => {
+            .then(response => {                
                 response.data.map(x => {
                     let fav = {'isFavouriteTrue':false};
                     x.user_id === this.$store.state.user_id && x.isFavourite === 1 ? fav = {'isFavouriteTrue':true} : fav = {'isFavouriteTrue':false};
@@ -93,6 +93,10 @@ export default {
                     this.listCompany.push(x)
                     this.listCompanyBackup = this.listCompany
                 });
+                
+                if(this.myfavonly){
+                    this.listCompany = this.listCompany.filter(x => x.isFavouriteTrue)
+                }
             })
         },
         toggleFavourite: function(index){
