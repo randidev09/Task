@@ -33,7 +33,7 @@ class AuthController extends Controller
         $username   = $request->username;
         $password   = $request->password;
         $user       = User::where('username',$username)->first();
-        if( ! empty($user) && Hash::check( $password, $user->password ) ){
+        if( ! empty($user) && Hash::check( $password, $user->password ) && $user->email_status == 1 ){
             session()->put('userID',$user->id);
             session()->put('is_login',true);
             Session::save();

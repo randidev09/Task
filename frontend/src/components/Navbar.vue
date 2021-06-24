@@ -14,6 +14,9 @@
         <router-link to="/favcompany">List Favourite Company</router-link>
       </li>
       <li v-if="this.$store.state.is_login">
+        <router-link to="/reset_password">Reset Password</router-link>
+      </li>
+      <li v-if="this.$store.state.is_login">
         <a v-on:click="logout">Logout</a>
       </li>
     </ul>

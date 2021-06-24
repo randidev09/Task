@@ -6,11 +6,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Str;
 use Validator;
 use App\Models\User;
 use App\Models\Company;
 use App\Models\FavouriteCompany;
+use App\Http\Controllers\MailController;
 
 class UsersController extends Controller
 {
@@ -39,17 +41,21 @@ class UsersController extends Controller
             return response()->json([
                 'code' => '300',
                 'message' => 'Failed to create user'
-            ])->withErrors($validator);
+            ]);
         }
 
+        $verif_code                 = Str::random(12);
         $user                       = new User;
         $user->username             = $request->username;
         $user->email                = $request->email;
         $user->phone                = $request->phone;
         $user->password             = Hash::make($request->password);
         $user->token_auth           = Str::random(64);
-        $user->verification_code    = Str::random(12);
+        $user->verification_code    = $verif_code;
+        $user->email_status         = 0;
         $user->save();
+
+        MailController::sendRegisterEmail($request->username, $request->email, $verif_code, $user->id);
 
         return response()->json([
             'code' => '200',
@@ -57,22 +63,55 @@ class UsersController extends Controller
         ]);
     }
 
-    public function update(request $request, $id){
-        $username = $request->username;
-        $email    = $request->email;
-        $phone    = $request->phone;
+    public function verifyEmail($id,$code){
+        $user   = User::find($id);
 
-        $user           = User::find($id);
-        $user->username = $username;
-        $user->email    = $email;
-        $user->phone    = $phone;
-        $user->save();
+        if($user->verification_code == $code){
+            $user->email_status = 1;
+            $user->save();
+            return redirect('http://localhost:8080/success_verify');
+        }else{
+            return abort(404);
+        }
+    }
 
-        return response()->json([
-            'code' => '200',
-            'message' => 'Successfully update user',
-            'user' => $user
-        ]);
+    public function updatePassword(request $request){
+        $rules = [
+            'curpassword'                 => 'required',
+            'newpassword'                 => 'required',
+            'conpassword'                 => 'required',
+        ];
+  
+        $messages = [ ];
+  
+        $validator = Validator::make($request->all(), $rules, $messages);
+        if($validator->fails()){
+            return response()->json([
+                'code' => '300',
+                'message' => 'Failed to reset password user'
+            ]);
+        }
+        $user_id        = $request->user_id;
+        $curpassword    = $request->curpassword;
+        $newpassword    = $request->newpassword;
+        $conpassword    = $request->conpassword;
+
+        $user           = User::find($user_id);
+        if(!empty($user) && ! Hash::check( $curpassword, $user->password)){
+            return response()->json([
+                'code' => '401',
+                'message' => 'Current password doesnt match'
+            ]);
+        }else{
+            $user->password = Hash::make($newpassword);
+            $user->save();
+
+            return response()->json([
+                'code' => '200',
+                'message' => 'Successfully reset password',
+                'user' => $user
+            ]);
+        }
     }
 
     public function delete($id){

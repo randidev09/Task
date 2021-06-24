@@ -12,6 +12,7 @@ Route::post('company','App\Http\Controllers\CompanyController@create');
 Route::middleware(['is_login'])->group(function () {
     Route::put('/user/{id}','App\Http\Controllers\UsersController@update');
     Route::delete('/user/{id}','App\Http\Controllers\UsersController@delete');
+    Route::put('/password','App\Http\Controllers\UsersController@updatePassword');
 
     Route::get('company','App\Http\Controllers\CompanyController@index');
     Route::put('/company/{id}','App\Http\Controllers\CompanyController@update');
