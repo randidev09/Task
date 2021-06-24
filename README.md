@@ -35,3 +35,18 @@ The frontend app will be run it on :
 ```http://172.17.0.2:8080/```<br>
 and the backend app will be run it on :
 ```http://localhost/```<br>if you can't access the frontend app, you can see the url on the new terminal that opened earlier.
+
+## Register Workflow
+
+```console
+1. Register user on frontend App
+2. User verify email address in local with accessing this URL http://0.0.0.0:8025/ (Mailhog)
+3. User click the link on the email and will be redirecting to the frontend app again
+```
+
+## API Documentation
+
+You can import API documentation with this link :
+```console
+https://www.getpostman.com/collections/af639735bfdcba550c2a
+```
