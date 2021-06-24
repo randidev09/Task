@@ -10,7 +10,7 @@ class CreateUserTable extends Migration
     {
         Schema::create('user', function (Blueprint $table) {
 
-		$table->integer('id',);
+		$table->increments('id');
 		$table->string('username',45);
 		$table->string('password');
 		$table->string('email',45);
@@ -18,7 +18,6 @@ class CreateUserTable extends Migration
 		$table->string('token_auth',64);
 		$table->string('verification_code',23);
 		$table->integer('email_status',);
-		$table->primary('id');
 
         });
     }
