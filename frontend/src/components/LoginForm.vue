@@ -37,12 +37,12 @@ export default {
       })
       .then(response => {
         let response_code = response.data.code
-        const thisUser = {
-          user_id: response.data.user.id,
-          user_name: response.data.user.username,
-          token: response.data.user.token_auth
-        }
         if(response_code == 200){
+          const thisUser = {
+            user_id: response.data.user.id,
+            user_name: response.data.user.username,
+            token: response.data.user.token_auth
+          }
           this.$store.commit('loginUpdate',thisUser)
           this.$router.push('/company');
         }else{

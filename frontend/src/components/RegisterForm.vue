@@ -52,7 +52,7 @@ export default {
         
         if(response_code == 200){
           alert('successfully register !')
-          this.$router.push('/login');
+          this.$router.push('/wait_verify');
         }else{
           alert('please fill all the column')
         }
