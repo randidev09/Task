@@ -1,6 +1,6 @@
 # Task
 
-This is personal project
+This is personal project, created using Laravel (Backend) & Vue JS (Frontend) with Docker Environment.
 
 ## Installation
 
