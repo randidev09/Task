@@ -31,6 +31,11 @@ make setup
 ```
 This command is for Linux User only. If you dont use Linux, you may have error when running this command. Take a look and modify `Makefile` file if you encounter some error when running this command.
 
+If you use Mac, run this command instead :
+```bash
+make setup_frontend && make setup_backend
+```
+
 this command will open a new terminal & run the project, its may take some times.<br>
 The frontend app will be run it on :
 ```http://localhost:8080/```<br>
